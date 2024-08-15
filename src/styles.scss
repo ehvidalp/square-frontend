@@ -1,1 +1,38 @@
-/* You can add global styles to this file, and also import other style files */
+// Importing Google Fonts
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+
+// Setting up the variables
+:root {
+  --primary-color: #da1fc5;
+  --secondary-color: #e8e8e889;
+  --dark-color: #030303;
+  --light-color: white;
+  --gray-color: #94a3b8;
+  --font-color: #1b1b1b;
+  --font-xl: 3rem;
+  --font-md: 2rem;
+  --font-sm: 1rem;
+  --font-xs: 0.875rem;
+}
+
+// Setting up the global styles
+html {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+  background-color: var(--light-color);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  display: block;
+  color: var(--font-color);
+}
