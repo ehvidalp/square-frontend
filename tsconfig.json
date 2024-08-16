@@ -5,6 +5,8 @@
   "compilerOptions": {
     "paths": {
       "@shared/*": ["./src/app/shared/*"],
+      "@core/*": ["./src/app/core/*"],
+      "@enviroment/*": ["./src/environments/*"],
     },
     "outDir": "./dist/out-tsc",
     "strict": true,

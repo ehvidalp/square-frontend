@@ -13,7 +13,12 @@
   --font-md: 2rem;
   --font-sm: 1rem;
   --font-xs: 0.875rem;
+  --font-xxs: 0.75rem;
 }
+
+// $breakpoint-sm: 640px;
+// $breakpoint-md: 768px;
+// $breakpoint-lg: 1024px;
 
 // Setting up the global styles
 html {
@@ -35,4 +40,16 @@ body {
   height: 100%;
   display: block;
   color: var(--font-color);
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
 }

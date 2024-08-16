@@ -1,0 +1,8 @@
+<input class="square-field" [class]="'square-field__'+ fieldOptions.size" placeholder="example"
+    [(ngModel)]="squareFieldValue" (keyup)="sendValueField()" />
+
+<span *ngIf="fieldOptions.error" class="square-field__msj-error">
+    {{fieldOptions.error}}
+</span>
+<!-- <label for="square-field">Square Field:</label>
+<input id="square-field" class="square-field" /> -->

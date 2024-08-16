@@ -25,8 +25,13 @@
 }
 
 .login__container {
-  background: red;
-  // min-width: 20rem;
-  width: 100%;
-  
+  width: 80%;
+  margin-top: 1rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .login__container {
+    max-width: 40rem;
+  }
 }

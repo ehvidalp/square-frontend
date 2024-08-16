@@ -1,3 +1,39 @@
 :host {
   display: block;
 }
+
+@keyframes clickAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  font-family: "Open Sans";
+  font-weight: 600;
+  outline: none;
+}
+
+button:active {
+  animation: clickAnimation 0.3s;
+}
+
+.square-btn__primary {
+  background: var(--primary-color);
+}
+
+.square-btn__full {
+  width: 100%;
+  height: 3.75rem;
+  font-size: var(--font-sm);
+  border: 1px solid var(--dark-color);
+}
