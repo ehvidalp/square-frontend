@@ -1,3 +1,4 @@
+<!-- Login  -->
 <h1 class="login__title">Square</h1>
 <section class="login__container">
     <p class="login__description">Enter email to log in</p>
@@ -7,3 +8,15 @@
         Sign in
     </app-square-button>
 </section>
+<!-- Modal Dialog for Registering Email -->
+<app-square-dialog [showDialog]="showRegisterDialog()">
+    <h2>Email Not Registered</h2>
+    <p>Please enter your name and email to register.</p>
+    <app-square-field [fieldOptions]="{size: 'large', error: messageError()}"
+        (squareFieldChange)="setUserEmail($event)"></app-square-field>
+        <app-square-field [fieldOptions]="{size: 'large', error: messageError()}"
+        (squareFieldChange)="setUserEmail($event)"></app-square-field>
+    <app-square-button class="mt-1" (click)="onLogin()" [squareButton]="{ uppercase: true, style: 'primary', size: 'full' }">
+        Submit
+    </app-square-button>
+</app-square-dialog>

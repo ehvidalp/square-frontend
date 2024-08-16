@@ -21,6 +21,7 @@ button {
   font-family: "Open Sans";
   font-weight: 600;
   outline: none;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
 }
 
 button:active {
@@ -37,3 +38,4 @@ button:active {
   font-size: var(--font-sm);
   border: 1px solid var(--dark-color);
 }
+

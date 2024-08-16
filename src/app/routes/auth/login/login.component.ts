@@ -1,27 +1,30 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@shared/services/auth.service';
 import { SquareButtonComponent } from '@shared/ui/square-button/square-button.component';
+import { SquareDialogComponent } from '@shared/ui/square-dialog/square-dialog.component';
 import { SquareFieldComponent } from '@shared/ui/square-field/square-field.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    CommonModule, SquareFieldComponent, SquareButtonComponent
+    CommonModule, SquareFieldComponent, SquareButtonComponent, SquareDialogComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   userEmail = signal('');
   messageError = signal('');
-  showModal = signal(false);
-  authService = inject(AuthService);
-  router = inject(Router);
-  showModalRegister = signal(false);
+  showRegisterDialog = computed(() => this.messageError() === 'user not found');
+  
+  
 
   setUserEmail(value: string) {
     this.userEmail.update(() => value);
@@ -36,8 +39,7 @@ export class LoginComponent {
     this.messageError.update(() => '');
     this.authService.login(this.userEmail()).subscribe({
       next: () => this.router.navigate(['/tasks']),
-      error: err => 
-        this.showModalRegister.update(() => err.message === 'showmodal'),
+      error: err => this.messageError.update(() => err),
     });
   }
 
