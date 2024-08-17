@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 
 interface SquareState {
   email: string;
@@ -17,7 +17,16 @@ interface Task {
   providedIn: 'root'
 })
 export class StateService {
+  private squareState = signal<SquareState>({ email: '', tasks: [] });
+  squareStateData = computed(() => this.squareState());
 
-  constructor() { }
+  setEmail(email: string): void {
+    this.squareState.update(state => ({ ...state, email }));
+  }
+
+  setTasks(tasks: Task[]): void {
+    this.squareState.update(state => ({ ...state, tasks }));
+  }
+
 
 }

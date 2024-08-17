@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from '@core/providers/auth.guard';
 
 export const routes: Routes = [
     {
@@ -8,12 +9,13 @@ export const routes: Routes = [
     },
     {
         path: 'tasks',
-        loadComponent: () => import('./routes/task/tasks-container/tasks-container.component').then(m => m.TasksContainerComponent)
+        loadComponent: () => import('./routes/task/tasks-container/tasks-container.component').then(m => m.TasksContainerComponent),
+        canActivate: [authGuard]
     },
     { 
         path: '', 
         redirectTo: 'tasks', 
-        pathMatch: 'full' 
+        pathMatch: 'full', 
     },
 ];
 

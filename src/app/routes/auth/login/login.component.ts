@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@shared/services/auth.service';
+import { StateService } from '@shared/services/state.service';
 import { SquareButtonComponent } from '@shared/ui/square-button/square-button.component';
 import { SquareDialogComponent } from '@shared/ui/square-dialog/square-dialog.component';
 import { SquareFieldComponent } from '@shared/ui/square-field/square-field.component';
@@ -29,6 +30,7 @@ interface LoginUser {
 export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private stateService = inject(StateService);
 
   loginUser = signal<LoginUser>({ email: ''});
   registerUser = signal<RegisterUser>({ email: '', name: '' });
@@ -43,7 +45,7 @@ export class LoginComponent {
     if(errorUserEmail || !email) return;
 
     this.authService.login(email).subscribe({
-      next: () => this.goToTasks(),
+      next: () => this.goToTasks(email),
       error: err => this.messageError.update(() => err),
     });
   }
@@ -51,7 +53,7 @@ export class LoginComponent {
   onRegister() {
     const { email, name } = this.registerUser();
     this.authService.register({ email, name}).subscribe({
-      next: () => this.goToTasks(),
+      next: () => this.goToTasks(email),
       error: err => this.messageError.update(() => err),
     });
   }
@@ -69,7 +71,8 @@ export class LoginComponent {
     this.registerUserErrors.update(errors => errors.filter(error => error !== key));
   }
 
-  goToTasks() {
+  goToTasks(email: string) {
+    this.stateService.setEmail(email);
     this.router.navigate(['/tasks']);
   }
   
