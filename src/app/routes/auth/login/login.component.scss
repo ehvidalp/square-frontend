@@ -30,6 +30,25 @@
   box-sizing: border-box;
 }
 
+.register__title {
+  font-size: 1.5rem;
+  font-family: "Roboto Mono";
+  font-weight: 700;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  color: var(--dark-color);
+  text-wrap: pretty;
+}
+
+.register__description {
+  font-size: var(--font-sm);
+  font-family: "Open Sans";
+  margin: 0.5rem 0 1rem;
+  padding: 0;
+  color: var(--dark-color);
+  text-wrap: pretty;
+}
+
 @media (min-width: 640px) {
   .login__container {
     max-width: 40rem;

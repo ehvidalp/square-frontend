@@ -3,6 +3,11 @@ import { inject, Injectable } from '@angular/core';
 import { ApiService } from '@shared/api/api.service';
 import { catchError, Observable, throwError } from 'rxjs';
 
+interface User {
+  name: string;
+  email: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,4 +21,7 @@ export class AuthService {
     );
   }
 
+  register(user: User): Observable<User> {
+    return this.apiService.post<User>('users', { ...user })
+  }
 }

@@ -1,8 +1,6 @@
-<input class="square-field" [class]="'square-field__'+ fieldOptions.size" placeholder="example"
-    [(ngModel)]="squareFieldValue" (keyup)="sendValueField()" />
+<input class="square-field" [placeholder]="fieldOptions.placeholder ?? ''" [(ngModel)]="valueField"
+    (ngModelChange)="onInputChange($event)"  />
 
-<span *ngIf="fieldOptions.error" class="square-field__msj-error">
-    {{fieldOptions.error}}
+<span *ngIf="errorValidation" class="square-field__msj-error">
+    {{ errorValidation === 'mail' ? 'Email is not valid' : 'Field is required' }}
 </span>
-<!-- <label for="square-field">Square Field:</label>
-<input id="square-field" class="square-field" /> -->

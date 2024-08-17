@@ -2,21 +2,31 @@
 <h1 class="login__title">Square</h1>
 <section class="login__container">
     <p class="login__description">Enter email to log in</p>
-    <app-square-field [fieldOptions]="{size: 'large', error: messageError()}"
-        (squareFieldChange)="setUserEmail($event)"></app-square-field>
+    <!-- (validationError)="errorUserEmail.set($event)  -->
+    <app-square-field [fieldOptions]="{ placeholder: 'email@example.com', validations: ['email']}"
+        (validationError)="setErrorUserEmail($event)" [(ngModel)]="loginUser().email">
+    </app-square-field>
+
     <app-square-button class="mt-1" (click)="onLogin()">
         Sign in
     </app-square-button>
 </section>
+
 <!-- Modal Dialog for Registering Email -->
 <app-square-dialog [showDialog]="showRegisterDialog()">
-    <h2>Email Not Registered</h2>
-    <p>Please enter your name and email to register.</p>
-    <app-square-field [fieldOptions]="{size: 'large', error: messageError()}"
-        (squareFieldChange)="setUserEmail($event)"></app-square-field>
-        <app-square-field [fieldOptions]="{size: 'large', error: messageError()}"
-        (squareFieldChange)="setUserEmail($event)"></app-square-field>
-    <app-square-button class="mt-1" (click)="onLogin()" [squareButton]="{ uppercase: true, style: 'primary', size: 'full' }">
-        Submit
-    </app-square-button>
+    <h2 class="register__title">Email Not Registered</h2>
+    <p class="register__description">Please enter your name and email to register.</p>
+
+    <form (ngSubmit)="onRegister()">
+        <app-square-field [(ngModel)]="registerUser().name"
+            (validationError)="setRegisterUserErrors('required', $event)" name="name"
+            [fieldOptions]="{ placeholder: 'Name', validations: ['required']}"></app-square-field>
+        <app-square-field [(ngModel)]="registerUser().email" name="email"
+            (validationError)="setRegisterUserErrors('mail', $event)"
+            [fieldOptions]="{ placeholder: 'email@example.com', validations: ['email']}"></app-square-field>
+        <app-square-button class="mt-1"
+            [squareButton]="{ uppercase: true, style: 'primary', size: 'full', type: 'submit', disabled: disabledRegisterButton()}">
+            Submit
+        </app-square-button>
+    </form>
 </app-square-dialog>

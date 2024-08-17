@@ -2,5 +2,7 @@
     <button class="square-dialog__close" type="button" (click)="onDialog(false)">
         <img src="/assets/svg/close.svg" alt="close">
     </button>
-    <ng-content></ng-content>
+    <section class="square-dialog__container">
+        <ng-content></ng-content>
+    </section>
 </dialog>

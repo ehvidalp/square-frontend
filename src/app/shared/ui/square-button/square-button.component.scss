@@ -28,6 +28,12 @@ button:active {
   animation: clickAnimation 0.3s;
 }
 
+button:disabled {
+  pointer-events: none;
+  background: var(--gray-color);
+  color: var(--dark-color);
+}
+
 .square-btn__primary {
   background: var(--primary-color);
 }

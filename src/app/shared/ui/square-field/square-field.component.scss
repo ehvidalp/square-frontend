@@ -1,7 +1,7 @@
 .square-field {
   width: 100%;
   border: 1px solid var(--gray-color);
-  height: 2.3rem;
+  height: 3.3rem;
   background: var(--secondary-color);
   color: var(--gray-color);
   padding: 0 0.5rem;
@@ -26,7 +26,8 @@
 
 .square-field__msj-error {
   display: block;
-  margin-top: 0.5rem;
+  box-sizing: border-box;
+  margin: 0.5rem 0;
   color: var(--primary-color);
   font-size: var(--font-xxs);
   font-family: 'Roboto Mono';
