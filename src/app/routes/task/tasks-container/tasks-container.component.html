@@ -1,32 +1,10 @@
 <app-square-header></app-square-header>
-
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
-<h1>TASK </h1>
+<section class="task-container">
+    <h1 class="task-container__title">My Tasks</h1>
+    <app-square-button class="mt-1" [squareButton]="{type: 'button', uppercase: true, style: 'minimal', size: 'small'}">
+        <img src="assets/svg/add.svg" alt="Add">
+        Add
+    </app-square-button>
+    
+    <app-square-task></app-square-task>
+</section>
