@@ -1,4 +1,5 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { Router } from '@angular/router';
 
 interface SquareState {
   email: string;
@@ -18,7 +19,9 @@ interface Task {
 })
 export class StateService {
   private squareState = signal<SquareState>({ email: '', tasks: [] });
+  private router = inject(Router);
   squareStateData = computed(() => this.squareState());
+
 
   setEmail(email: string): void {
     this.squareState.update(state => ({ ...state, email }));
@@ -28,5 +31,9 @@ export class StateService {
     this.squareState.update(state => ({ ...state, tasks }));
   }
 
+  resetSquareState(): void {
+    this.squareState.update(() => ({ email: '', tasks: [] }));
+    this.router.navigate(['/login']);
+  }
 
 }
