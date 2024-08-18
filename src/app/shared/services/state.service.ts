@@ -1,17 +1,10 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { Task } from '@shared/interfaces/task.interface';
 
 interface SquareState {
   email: string;
   tasks: Task[];
-}
-
-interface Task {
-  id: string;
-  title: string;
-  description: string;
-  completed: boolean;
-  created_at: Date;
 }
 
 @Injectable({
@@ -36,4 +29,5 @@ export class StateService {
     this.router.navigate(['/login']);
   }
 
+  
 }

@@ -1,0 +1,7 @@
+<section class="container-toggle" (click)="onClickToggle()">
+    <div class="toggle" [ngStyle]="{'left': isToggled ? 'calc(50% + 3px)' : '3px'}"></div>
+    <input type="checkbox" class="toggle-input" />
+</section>
+<span class="toggle-status">
+    {{ isToggled ? 'Completed' : 'Pending' }}
+</span>

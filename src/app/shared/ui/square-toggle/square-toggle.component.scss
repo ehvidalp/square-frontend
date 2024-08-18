@@ -1,0 +1,50 @@
+:host {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.container-toggle {
+  cursor: pointer;
+  display: block;
+  position: relative;
+  width: 40px;
+  height: 20px;
+  opacity: 1;
+  pointer-events: auto;
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid var(--dark-color);
+}
+
+.toggle {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  width: calc(50% - 6px);
+  height: calc(100% - 6px);
+  transform: translate(0%, -50%);
+  font-size: 14px;
+  transition: left 0.3s ease;
+  border-radius: 10px;
+  background-color: rgba(3, 3, 3, 1);
+}
+
+.toggle-input {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.toggle-status {
+    color: var(--dark-color);
+    font-size: var(--font-xxs);
+    font-family: "Open Sans";
+    font-weight: 400;
+    align-self: center;
+  
+}

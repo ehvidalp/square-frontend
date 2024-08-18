@@ -20,10 +20,6 @@
   }
 }
 
-.square-field__large {
-  height: 3.7rem;
-}
-
 .square-field__msj-error {
   display: block;
   box-sizing: border-box;
@@ -32,4 +28,9 @@
   font-size: var(--font-xxs);
   font-family: 'Roboto Mono';
   font-weight: 400;
+}
+
+.square-field__textarea {
+  height: 7rem;
+  padding-top: 0.5rem;
 }

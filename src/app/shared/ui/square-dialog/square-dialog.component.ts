@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-square-dialog',
@@ -11,19 +11,25 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, Simpl
   styleUrl: './square-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SquareDialogComponent implements OnChanges{
-
+export class SquareDialogComponent implements OnChanges {
   @ViewChild('dialog') squareDialog!: ElementRef;
   @Input() showDialog = false;
+  @Output() actionDialog = new EventEmitter<string>();
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['showDialog'] && changes['showDialog'].currentValue) this.onDialog(this.showDialog);
   }
 
-  
+
   onDialog(showDialog: boolean) {
-    return showDialog ?
-      this.squareDialog.nativeElement.showModal() :
+
+    if (!showDialog) {
+      this.actionDialog.emit('close');
       this.squareDialog.nativeElement.close();
+      return
+    }
+    
+    this.squareDialog.nativeElement.showModal();
+
   }
 }

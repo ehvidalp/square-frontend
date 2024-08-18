@@ -5,6 +5,8 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 interface FieldOptions {
   placeholder?: string;
   validations?: ('email' | 'required')[];
+  type?: 'text' | 'password' | 'email';
+  typeField: 'input' | 'textarea';
 }
 
 @Component({
@@ -25,7 +27,7 @@ interface FieldOptions {
   ]
 })
 export class SquareFieldComponent implements ControlValueAccessor {
-  @Input() fieldOptions: FieldOptions = {};
+  @Input() fieldOptions: FieldOptions = { typeField: 'input' };
   @Input() valueField: string | null = null;
   @Output() valueFieldChange = new EventEmitter<string>();
   @Output() validationError = new EventEmitter<boolean>();

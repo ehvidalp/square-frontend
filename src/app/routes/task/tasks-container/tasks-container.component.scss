@@ -1,5 +1,6 @@
 :host {
   display: block;
+  box-sizing: border-box;
 }
 
 .task-container {
@@ -17,4 +18,36 @@
   font-weight: 500;
   line-height: 31px;
   margin: 0;
+}
+
+.task-container__list {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.task-modal__title {
+  font-family: 'Open Sans';
+  font-weight: 700;
+  font-size: var(--font-md);
+  
+}
+
+.task-modal__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.task-modal__actions > div {
+  display: flex;
+  gap: 1rem;
+}
+
+.task-modal__edit {
+  padding: 0.25rem 0;
 }

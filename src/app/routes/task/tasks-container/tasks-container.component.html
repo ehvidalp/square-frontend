@@ -1,10 +1,43 @@
 <app-square-header></app-square-header>
 <section class="task-container">
     <h1 class="task-container__title">My Tasks</h1>
-    <app-square-button class="mt-1" [squareButton]="{type: 'button', uppercase: true, style: 'minimal', size: 'small'}">
+    <app-square-button (click)="setActionTask('new', null)" class="mt-1"
+        [squareButton]="{type: 'button', uppercase: true, style: 'minimal', size: 'small'}">
         <img src="assets/svg/add.svg" alt="Add">
         Add
     </app-square-button>
-    
-    <app-square-task></app-square-task>
+    <div class="task-container__list">
+        <app-square-task *ngFor="let task of stateService.squareStateData().tasks" [task]="task"
+            (action)="setActionTask($event, task)"></app-square-task>
+    </div>
+    <!-- Modal Dialog task -->
+    <app-square-dialog [showDialog]="actionTask() !== null"
+        (actionDialog)="setActionTask(null, null)">
+        <h2 class="task-modal__title">
+            {{ actionTask() === 'new' ? 'New Task' : 'Edit Task' }}
+        </h2>
+        <form (ngSubmit)="onSubmitTask()">
+            <app-square-field [(ngModel)]="currentTask().title" name="title"
+                [fieldOptions]="{ placeholder: 'Title', validations: ['required'], typeField: 'input'}"
+                (validationError)="errorFormTask.set($event)"
+                ></app-square-field>
+            <app-square-field class="mt-1" [(ngModel)]="currentTask().description" name="description"
+                [fieldOptions]="{ placeholder: 'Description', typeField: 'textarea'}"></app-square-field>
+            <section class="task-modal__actions">
+                <app-square-toggle [isToggled]="currentTask().completed" (toggle)="updateStatusTask($event)"></app-square-toggle>
+                <div>
+                    <app-square-button *ngIf="actionTask() === 'edit'"
+                        [squareButton]="{ uppercase: true, style: 'minimal', size: 'small', type: 'button'}">
+                        <span class="task-modal__edit">
+                            Delete
+                        </span>
+                    </app-square-button>
+                    <app-square-button
+                        [squareButton]="{ uppercase: true, style: 'primary', size: 'small', type: 'submit'}">
+                        {{ actionTask() === 'edit' ? 'Edit': 'Save'}}
+                    </app-square-button>
+                </div>
+            </section>
+        </form>
+    </app-square-dialog>
 </section>

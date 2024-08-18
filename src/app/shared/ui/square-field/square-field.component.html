@@ -1,6 +1,18 @@
-<input class="square-field" [placeholder]="fieldOptions.placeholder ?? ''" [(ngModel)]="valueField"
-    (ngModelChange)="onInputChange($event)"  />
+@switch (fieldOptions.typeField) {
+@case ('input') {
+<input [(ngModel)]="valueField" (ngModelChange)="onInputChange($event)" class="square-field"
+    [placeholder]="fieldOptions.placeholder ?? ''" [type]="fieldOptions.type ?? 'text'" />
 
 <span *ngIf="errorValidation" class="square-field__msj-error">
     {{ errorValidation === 'mail' ? 'Email is not valid' : 'Field is required' }}
 </span>
+}
+@case ('textarea') {
+<textarea [(ngModel)]="valueField" (ngModelChange)="onInputChange($event)" class="square-field square-field__textarea"
+    [placeholder]="fieldOptions.placeholder ?? ''">
+</textarea>
+}
+@default {
+<p>Set typeField </p>
+}
+}
