@@ -10,6 +10,7 @@ import { SquareFieldComponent } from '@shared/ui/square-field/square-field.compo
 import { SquareHeaderComponent } from '@shared/ui/square-header/square-header.component';
 import { SquareTaskComponent } from '@shared/ui/square-task/square-task.component';
 import { SquareToggleComponent } from '@shared/ui/square-toggle/square-toggle.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tasks-container',
@@ -30,8 +31,9 @@ import { SquareToggleComponent } from '@shared/ui/square-toggle/square-toggle.co
 })
 export class TasksContainerComponent implements OnInit {
   private taskService = inject(TaskService);
-  stateService = inject(StateService);
+  private destroy$ = new Subject<void>();
 
+  stateService = inject(StateService);
   actionTask = signal<('edit' | 'new') | null>(null);
   showDialogTask = false;
   currentTask = signal<Task>({ title: '', description: '', completed: false });
@@ -42,7 +44,9 @@ export class TasksContainerComponent implements OnInit {
   }
   
   getTasks() {
-    this.taskService.getTasks().subscribe((tasks) => {
+    this.taskService.getTasks()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((tasks) => {
       this.stateService.setTasks(tasks);
     });
   }
@@ -63,21 +67,27 @@ export class TasksContainerComponent implements OnInit {
   }
 
   createTask() {
-    this.taskService.createTask(this.currentTask()).subscribe((task) => {
+    this.taskService.createTask(this.currentTask())
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((task) => {
       this.stateService.addTask(this.currentTask());
       this.setActionTask(null, null);
     });
   }
 
   updateTask() {
-    this.taskService.updateTask(this.currentTask()).subscribe((task) => {
+    this.taskService.updateTask(this.currentTask())
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((task) => {
       this.stateService.updateTask(task);
       this.setActionTask(null, null);
     });
   }
 
   deleteTask() {
-    this.taskService.deleteTask(this.currentTask()).subscribe(() => {
+    this.taskService.deleteTask(this.currentTask())
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(() => {
       this.stateService.deleteTask(this.currentTask());
       this.setActionTask(null, null);
     });
