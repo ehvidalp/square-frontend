@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Task } from '@shared/interfaces/task.interface';
 import { StateService } from '@shared/services/state.service';
@@ -33,42 +33,67 @@ export class TasksContainerComponent implements OnInit {
   stateService = inject(StateService);
 
   actionTask = signal<('edit' | 'new') | null>(null);
+  showDialogTask = false;
   currentTask = signal<Task>({ title: '', description: '', completed: false });
   errorFormTask = signal<boolean>(false);
 
   ngOnInit(): void {
     this.getTasks();
-
-    setTimeout(() => {
-      this.actionTask.set('edit');
-    }, 500);
   }
   
   getTasks() {
-    const email = this.stateService.squareStateData().email ?? '';
-    this.taskService.getTasks('example@mail.co').subscribe((tasks) => {
+    this.taskService.getTasks().subscribe((tasks) => {
       this.stateService.setTasks(tasks);
+    });
+  }
+
+
+  onSubmitTask(action?: 'edit' | 'new' | 'delete') {
+    const currentAction = action || this.actionTask();
+    
+    const taskOptions = {
+      edit: () => this.updateTask(),
+      new: () => this.createTask(),
+      delete: () => this.deleteTask(),
+    };
+
+    if (currentAction && taskOptions[currentAction]) {
+      return taskOptions[currentAction]();
+    }
+  }
+
+  createTask() {
+    this.taskService.createTask(this.currentTask()).subscribe((task) => {
+      this.stateService.addTask(this.currentTask());
+      this.setActionTask(null, null);
+    });
+  }
+
+  updateTask() {
+    this.taskService.updateTask(this.currentTask()).subscribe((task) => {
+      this.stateService.updateTask(task);
+      this.setActionTask(null, null);
+    });
+  }
+
+  deleteTask() {
+    this.taskService.deleteTask(this.currentTask()).subscribe(() => {
+      this.stateService.deleteTask(this.currentTask());
+      this.setActionTask(null, null);
     });
   }
 
   setActionTask(action: 'edit' | 'new' | null, task: Task | null) {
     this.actionTask.set(action);
+    this.showDialogTask = action !== null;
 
     if (task !== null) this.currentTask.set(task!);
 
-    if (task === null || action === null) this.currentTask.set({ title: '', description: '', completed: false });
-    
+    if (task === null || action === null) {
+      this.currentTask.set({ title: '', description: '', completed: false });
+      this.errorFormTask.set(false);
+    }
   }
-
-  setEditTask(task: Task) {
-    this.currentTask.set(task);
-    this.actionTask.set('edit');
-  }
-
-  onSubmitTask() {
-    console.log('Task submitted');
-  }
-
   updateStatusTask(status: boolean) {
     this.currentTask.update((task) => ({ ...task, completed: status }));
   }

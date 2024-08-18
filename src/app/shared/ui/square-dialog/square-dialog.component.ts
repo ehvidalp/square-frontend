@@ -17,13 +17,13 @@ export class SquareDialogComponent implements OnChanges {
   @Output() actionDialog = new EventEmitter<string>();
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['showDialog'] && changes['showDialog'].currentValue) this.onDialog(this.showDialog);
+    if (changes['showDialog']) this.onDialog(changes['showDialog'].currentValue)
   }
 
-
   onDialog(showDialog: boolean) {
+    if (!this.squareDialog) return;
 
-    if (!showDialog) {
+    if (!showDialog && this.squareDialog && this.squareDialog?.nativeElement) {
       this.actionDialog.emit('close');
       this.squareDialog.nativeElement.close();
       return

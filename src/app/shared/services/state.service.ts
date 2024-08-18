@@ -24,6 +24,26 @@ export class StateService {
     this.squareState.update(state => ({ ...state, tasks }));
   }
 
+  addTask(task: Task): void {
+    this.squareState.update(state => ({ ...state, tasks: [...state.tasks, task] }));
+  }
+
+  updateTask(task: Task): void {
+    this.squareState.update(state => ({
+      ...state,
+      // !! change for id
+      tasks: state.tasks.map(t => (t.title === task.title ? task : t))
+    }));
+  }
+
+  deleteTask(task: Task): void {
+    this.squareState.update(state => ({
+      ...state,
+      // !! change for id
+      tasks: state.tasks.filter(t => t.title !== task.title)
+    }));
+  }
+  
   resetSquareState(): void {
     this.squareState.update(() => ({ email: '', tasks: [] }));
     this.router.navigate(['/login']);
