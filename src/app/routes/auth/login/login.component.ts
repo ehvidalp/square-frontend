@@ -37,7 +37,7 @@ export class LoginComponent {
   registerUserErrors = signal<string[]>([]);
   disabledRegisterButton = computed(() => this.registerUserErrors().length > 0 || !this.registerUser().name || !this.registerUser().email);
   messageError = signal('');
-  showRegisterDialog = computed(() => this.messageError() === 'user not found');
+  showRegisterDialog = computed(() => this.messageError() === 'User not found');
   
   onLogin() {
     const { email, errorUserEmail = false } = this.loginUser();
@@ -46,7 +46,10 @@ export class LoginComponent {
 
     this.authService.login(email).subscribe({
       next: () => this.goToTasks(email),
-      error: err => this.messageError.update(() => err),
+      error: err => {
+        this.messageError.update(() => err)
+        this.registerUser.update(user => ({ ...user, email: this.loginUser().email }));
+      },
     });
   }
 
@@ -54,7 +57,7 @@ export class LoginComponent {
     const { email, name } = this.registerUser();
     this.authService.register({ email, name}).subscribe({
       next: () => this.goToTasks(email),
-      error: err => this.messageError.update(() => err),
+      error: (err) => this.messageError.update(() => err),
     });
   }
 

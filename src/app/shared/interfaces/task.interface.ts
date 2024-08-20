@@ -4,7 +4,5 @@ export interface Task {
     description: string;
     created_at?: Date;
     completed: boolean;
-    user?: {
-        email: string;
-    };
+    email?: string;
   }

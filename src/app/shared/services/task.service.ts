@@ -3,6 +3,7 @@ import { ApiService } from '@shared/api/api.service';
 import { Task } from '@shared/interfaces/task.interface';
 import { Observable } from 'rxjs';
 import { StateService } from './state.service';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,13 @@ export class TaskService {
 
   constructor() { }
 
-  getTasks(): Observable<Task[]> {
-    const email = this.stateService.squareStateData().email || 'ex@dd.co';
-    return this.apiService.get<Task[]>(`tasks/${email}`);
+  getTasks(): Observable<{ tasks: Task[] }> {
+    const params = new HttpParams().set('email', this.stateService.squareStateData().email);
+    return this.apiService.get<{ tasks: Task[] }>('tasks', params);
   }
 
-  createTask(task: Task): Observable<Task> {
-    return this.apiService.post<Task>('tasks', task);
+  createTask(task: Task): Observable<Partial<Task>> {
+    return this.apiService.post<Partial<Task>>('tasks', task);
   }
 
   updateTask(task: Task): Observable<Task> {
@@ -30,5 +31,5 @@ export class TaskService {
     return this.apiService.delete<Task>(`tasks/${task.id}`);
   }
 
-  
+
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@enviroment/environment';
 
@@ -10,8 +10,8 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  get<T>(path: string) {
-    return this.http.get<T>(`${this.squareApiUrl}/${path}`);
+  get<T>(path: string, params?: HttpParams ) {
+    return this.http.get<T>(`${this.squareApiUrl}/${path}`, { params });
   }
 
   post<T>(path: string, body: T) {

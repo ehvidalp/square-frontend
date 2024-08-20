@@ -38,23 +38,31 @@ export class TasksContainerComponent implements OnInit {
   showDialogTask = false;
   currentTask = signal<Task>({ title: '', description: '', completed: false });
   errorFormTask = signal<boolean>(false);
+  tasks = computed(() => {
+    return (this.stateService.squareStateData().tasks ?? []).sort((a, b) => {
+      if (a.completed && !b.completed) return 1;
+      else if (!a.completed && b.completed) return -1;
+
+      return a.created_at! > b.created_at! ? -1 : 1;
+
+    });
+  });
 
   ngOnInit(): void {
     this.getTasks();
   }
-  
+
   getTasks() {
     this.taskService.getTasks()
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((tasks) => {
-      this.stateService.setTasks(tasks);
-    });
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ tasks }) => {
+        this.stateService.setTasks(tasks);
+      });
   }
-
 
   onSubmitTask(action?: 'edit' | 'new' | 'delete') {
     const currentAction = action || this.actionTask();
-    
+
     const taskOptions = {
       edit: () => this.updateTask(),
       new: () => this.createTask(),
@@ -67,37 +75,46 @@ export class TasksContainerComponent implements OnInit {
   }
 
   createTask() {
-    this.taskService.createTask(this.currentTask())
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((task) => {
-      this.stateService.addTask(this.currentTask());
-      this.setActionTask(null, null);
-    });
+    const newTask: Task = {
+      ...this.currentTask(),
+      email: this.stateService.squareStateData().email,
+      created_at: new Date(),
+    };
+
+    this.taskService.createTask(newTask)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ id }) => {
+        this.stateService.addTask({
+          id,
+          ...newTask,
+        });
+        this.setActionTask(null, null);
+      });
   }
 
   updateTask() {
     this.taskService.updateTask(this.currentTask())
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((task) => {
-      this.stateService.updateTask(task);
-      this.setActionTask(null, null);
-    });
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.stateService.updateTask(this.currentTask());
+        this.setActionTask(null, null);
+      });
   }
 
   deleteTask() {
     this.taskService.deleteTask(this.currentTask())
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(() => {
-      this.stateService.deleteTask(this.currentTask());
-      this.setActionTask(null, null);
-    });
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.stateService.deleteTask(this.currentTask());
+        this.setActionTask(null, null);
+      });
   }
 
   setActionTask(action: 'edit' | 'new' | null, task: Task | null) {
     this.actionTask.set(action);
     this.showDialogTask = action !== null;
 
-    if (task !== null) this.currentTask.set(task!);
+    if (task !== null) this.currentTask.set({ ...task! });
 
     if (task === null || action === null) {
       this.currentTask.set({ title: '', description: '', completed: false });

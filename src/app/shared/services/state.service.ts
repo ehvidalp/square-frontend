@@ -11,7 +11,7 @@ interface SquareState {
   providedIn: 'root'
 })
 export class StateService {
-  private squareState = signal<SquareState>({ email: '', tasks: [] });
+  squareState = signal<SquareState>({ email: '', tasks: [] });
   private router = inject(Router);
   squareStateData = computed(() => this.squareState());
 
@@ -31,16 +31,14 @@ export class StateService {
   updateTask(task: Task): void {
     this.squareState.update(state => ({
       ...state,
-      // !! change for id
-      tasks: state.tasks.map(t => (t.title === task.title ? task : t))
+      tasks: state.tasks.map(t => (t.id === task.id ? task : t))
     }));
   }
 
   deleteTask(task: Task): void {
     this.squareState.update(state => ({
       ...state,
-      // !! change for id
-      tasks: state.tasks.filter(t => t.title !== task.title)
+      tasks: state.tasks.filter(t => t.id !== task.id)
     }));
   }
   

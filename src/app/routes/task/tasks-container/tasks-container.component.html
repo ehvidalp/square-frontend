@@ -6,9 +6,12 @@
         <img src="assets/svg/add.svg" alt="Add">
         Add
     </app-square-button>
-    <div class="task-container__list">
-        <app-square-task *ngFor="let task of stateService.squareStateData().tasks" [task]="task"
+    <div class="task-container__list" *ngIf="tasks().length > 0">
+        <app-square-task *ngFor="let task of tasks()" [task]="task"
             (action)="setActionTask($event, task)"></app-square-task>
+    </div>
+    <div class="task-container__empty" *ngIf="tasks().length === 0">
+        Empty task list
     </div>
     <!-- Modal Dialog task -->
     <app-square-dialog [showDialog]="showDialogTask" (actionDialog)="setActionTask(null, null)">
