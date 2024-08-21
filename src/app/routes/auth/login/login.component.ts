@@ -7,6 +7,7 @@ import { StateService } from '@shared/services/state.service';
 import { SquareButtonComponent } from '@shared/ui/square-button/square-button.component';
 import { SquareDialogComponent } from '@shared/ui/square-dialog/square-dialog.component';
 import { SquareFieldComponent } from '@shared/ui/square-field/square-field.component';
+import { finalize } from 'rxjs';
 
 interface RegisterUser {
   email: string;
@@ -32,30 +33,42 @@ export class LoginComponent {
   private router = inject(Router);
   private stateService = inject(StateService);
 
-  loginUser = signal<LoginUser>({ email: ''});
+  loginUser = signal<LoginUser>({ email: '' });
   registerUser = signal<RegisterUser>({ email: '', name: '' });
   registerUserErrors = signal<string[]>([]);
   disabledRegisterButton = computed(() => this.registerUserErrors().length > 0 || !this.registerUser().name || !this.registerUser().email);
   messageError = signal('');
   showRegisterDialog = computed(() => this.messageError() === 'User not found');
-  
+  isLoadingButton = signal(false);
+
   onLogin() {
     const { email, errorUserEmail = false } = this.loginUser();
 
-    if(errorUserEmail || !email) return;
+    if (errorUserEmail || !email) return;
 
-    this.authService.login(email).subscribe({
-      next: () => this.goToTasks(email),
-      error: err => {
-        this.messageError.update(() => err)
-        this.registerUser.update(user => ({ ...user, email: this.loginUser().email }));
-      },
-    });
+    this.isLoadingButton.update(() => true);
+
+    this.authService.login(email)
+      .pipe(
+        finalize(() => this.isLoadingButton.update(() => false)))
+      .subscribe({
+        next: () => this.goToTasks(email),
+        error: err => {
+          this.messageError.update(() => err)
+          this.registerUser.update(user => ({ ...user, email: this.loginUser().email }));
+        },
+      });
   }
 
   onRegister() {
     const { email, name } = this.registerUser();
-    this.authService.register({ email, name}).subscribe({
+
+    this.isLoadingButton.update(() => true);
+
+    this.authService.register({ email, name })
+    .pipe(
+      finalize(() => this.isLoadingButton.update(() => false)))
+    .subscribe({
       next: () => this.goToTasks(email),
       error: (err) => this.messageError.update(() => err),
     });
@@ -78,5 +91,8 @@ export class LoginComponent {
     this.stateService.setEmail(email);
     this.router.navigate(['/tasks']);
   }
-  
+
+  onDialog(action: string) {
+    if (action === 'close') this.messageError.update(() => '');
+  }
 }

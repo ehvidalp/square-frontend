@@ -10,7 +10,7 @@ import { SquareFieldComponent } from '@shared/ui/square-field/square-field.compo
 import { SquareHeaderComponent } from '@shared/ui/square-header/square-header.component';
 import { SquareTaskComponent } from '@shared/ui/square-task/square-task.component';
 import { SquareToggleComponent } from '@shared/ui/square-toggle/square-toggle.component';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tasks-container',
@@ -34,10 +34,11 @@ export class TasksContainerComponent implements OnInit {
   private destroy$ = new Subject<void>();
 
   stateService = inject(StateService);
-  actionTask = signal<('edit' | 'new') | null>(null);
+  actionTask = signal<('edit' | 'new' | 'delete') | null>(null);
   showDialogTask = false;
   currentTask = signal<Task>({ title: '', description: '', completed: false });
   errorFormTask = signal<boolean>(false);
+  isLoadingButton = signal(false);
   tasks = computed(() => {
     return (this.stateService.squareStateData().tasks ?? []).sort((a, b) => {
       if (a.completed && !b.completed) return 1;
@@ -62,7 +63,9 @@ export class TasksContainerComponent implements OnInit {
 
   onSubmitTask(action?: 'edit' | 'new' | 'delete') {
     const currentAction = action || this.actionTask();
-
+    
+    this.actionTask.set(currentAction);
+    
     const taskOptions = {
       edit: () => this.updateTask(),
       new: () => this.createTask(),
@@ -70,6 +73,7 @@ export class TasksContainerComponent implements OnInit {
     };
 
     if (currentAction && taskOptions[currentAction]) {
+      this.isLoadingButton.update(() => true);
       return taskOptions[currentAction]();
     }
   }
@@ -82,7 +86,9 @@ export class TasksContainerComponent implements OnInit {
     };
 
     this.taskService.createTask(newTask)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isLoadingButton.update(() => false)))
       .subscribe(({ id }) => {
         this.stateService.addTask({
           id,
@@ -94,7 +100,9 @@ export class TasksContainerComponent implements OnInit {
 
   updateTask() {
     this.taskService.updateTask(this.currentTask())
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isLoadingButton.update(() => false)))
       .subscribe(() => {
         this.stateService.updateTask(this.currentTask());
         this.setActionTask(null, null);
@@ -103,7 +111,9 @@ export class TasksContainerComponent implements OnInit {
 
   deleteTask() {
     this.taskService.deleteTask(this.currentTask())
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isLoadingButton.update(() => false)))
       .subscribe(() => {
         this.stateService.deleteTask(this.currentTask());
         this.setActionTask(null, null);

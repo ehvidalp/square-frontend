@@ -1,3 +1,4 @@
 <button [type]="squareButton.type || 'button'" [ngClass]="squaredButtonClasses()" [disabled]="squareButton.disabled">
-    <ng-content></ng-content>
+    <span *ngIf="loading" class="loader"></span>
+    <ng-content *ngIf="!loading"></ng-content>
 </button>

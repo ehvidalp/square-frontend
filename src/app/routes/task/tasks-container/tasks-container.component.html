@@ -28,14 +28,16 @@
                 <app-square-toggle [isToggled]="currentTask().completed"
                     (toggle)="updateStatusTask($event)"></app-square-toggle>
                 <div>
-                    <app-square-button *ngIf="actionTask() === 'edit'"
+                    <app-square-button *ngIf="actionTask() === 'edit' || actionTask() === 'delete'"
                         (click)="onSubmitTask('delete')"
+                        [loading]="isLoadingButton() && actionTask() === 'delete'"
                         [squareButton]="{ uppercase: true, style: 'minimal', size: 'small', type: 'button'}">
                         <span class="task-modal__edit">
                             Delete
                         </span>
                     </app-square-button>
                     <app-square-button
+                        [loading]="isLoadingButton() && (actionTask() === 'edit' || actionTask() === 'new')"
                         [squareButton]="{ uppercase: true, style: 'primary', size: 'small', type: 'submit', disabled: errorFormTask()}">
                         {{ actionTask() === 'edit' ? 'Edit': 'Save'}}
                     </app-square-button>

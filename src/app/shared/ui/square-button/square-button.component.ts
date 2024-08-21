@@ -25,7 +25,8 @@ export class SquareButtonComponent {
     size: 'full',
     uppercase: false,
   };
-
+  @Input() loading = false;
+  
   squaredButtonClasses = computed(() => [
     `square-btn__${this.squareButton.style}`,
     `square-btn__${this.squareButton.size}`,

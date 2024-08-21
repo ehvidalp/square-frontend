@@ -7,16 +7,15 @@
         (validationError)="setErrorUserEmail($event)">
     </app-square-field>
 
-    <app-square-button class="mt-1" (click)="onLogin()">
+    <app-square-button class="mt-1" (click)="onLogin()" [loading]="isLoadingButton()" >
         Sign in
     </app-square-button>
 </section>
 
 <!-- Modal Dialog for Registering Email -->
-<app-square-dialog [showDialog]="showRegisterDialog()">
+<app-square-dialog [showDialog]="showRegisterDialog()" (actionDialog)="onDialog($event)">
     <h2 class="register__title">Email Not Registered</h2>
     <p class="register__description">Please enter your name and email to register.</p>
-
     <form (ngSubmit)="onRegister()">
         <app-square-field [(ngModel)]="registerUser().name"
             (validationError)="setRegisterUserErrors('required', $event)" name="name"
@@ -27,6 +26,7 @@
             [fieldOptions]="{ placeholder: 'email@example.com', validations: ['email'], type: 'email', typeField: 'input'}">
         </app-square-field>
         <app-square-button class="mt-1"
+            [loading]="isLoadingButton()"
             [squareButton]="{ uppercase: true, style: 'primary', size: 'full', type: 'submit', disabled: disabledRegisterButton()}">
             Submit
         </app-square-button>
